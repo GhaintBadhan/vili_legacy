@@ -15,8 +15,8 @@ jobs:
 
       - name: Configure Git identity
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GhaintBadhan"
+          git config user.email "ghaint.badhan@gmail.com"
 
       - name: Add HyperOS remote
         run: |
