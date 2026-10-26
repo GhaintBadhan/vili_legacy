@@ -1,0 +1,37 @@
+name: Merge HyperOS into LineageOS
+on: workflow_dispatch
+
+permissions:
+  contents: write   # needed only for push step at the end
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout LineageOS kernel
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add HyperOS remote
+        run: |
+          git remote add hyperos https://github.com/diphons/kernel_xiaomi_sm8350.git || true
+          git fetch hyperos
+
+      - name: Inspect HyperOS commits
+        run: |
+          git log --oneline hyperos/main -n 50 | tee hyperos-log.txt
+          git diff --stat HEAD hyperos/main | tee diff-stat.txt
+
+      - name: Upload inspection artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: merge-inspection
+          path: |
+            hyperos-log.txt
+            diff-stat.txt
